@@ -769,6 +769,12 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(BlockChainTestsHomestead)
 
+BOOST_AUTO_TEST_CASE(bcTheDaoTestHomestead)
+{
+	dev::test::TestBlockChain::s_sealEngineNetwork = eth::Network::HomesteadTest;
+	dev::test::executeTests("bcTheDaoTest", "/BlockchainTests/Homestead",dev::test::getFolder(__FILE__) + "/BlockchainTestsFiller/Homestead", dev::test::doBlockchainTests);
+}
+
 BOOST_AUTO_TEST_CASE(bcForkStressTestHomestead)
 {
 	dev::test::TestBlockChain::s_sealEngineNetwork = eth::Network::HomesteadTest;

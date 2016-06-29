@@ -38,6 +38,7 @@
 #include "CachedAddressState.h"
 #include "BlockChain.h"
 #include "TransactionQueue.h"
+#include "GenesisInfo.h"
 using namespace std;
 using namespace dev;
 using namespace dev::eth;
@@ -680,12 +681,12 @@ void Block::applyRewards(vector<BlockHeader> const& _uncleBlockHeaders, u256 con
 
 void Block::performIrregularModifications()
 {
-	u256 daoHardfork("0x999999999999"); // TODO
+	u256 daoHardfork("0x02"); // TODO
 	if (info().number() == daoHardfork)
 	{
 		// @TODO check trigger
 		Address mainDAO("0xbb9bc244d798123fde783fcc1c72d3bb8c189413");
-		Addresses allDAOs;  //@TODO
+		Addresses allDAOs = childDaos();
 		bytes newDAOCode; //@TODO
 		for (Address const& dao: allDAOs)
 			m_state.transferBalance(dao, mainDAO, m_state.balance(dao));
