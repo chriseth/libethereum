@@ -197,6 +197,9 @@ public:
 	/// Create a new contract.
 	Address newContract(u256 const& _balance, bytes const& _code);
 
+	/// Sets the code at the given address, regardless whether it already had code.
+	void modifyCode(Address const& _contract, bytes const& _code);
+
 	/// Get the storage of an account.
 	/// @note This is expensive. Don't use it unless you need to.
 	/// @returns std::unordered_map<u256, u256> if no account exists at that address.

@@ -126,6 +126,8 @@ void Block::resetCurrent(u256 const& _timestamp)
 	m_state.setRoot(m_previousBlock.stateRoot());
 	m_precommit = m_state;
 	m_committedToSeal = false;
+
+	performIrregularModifications();
 }
 
 SealEngineFace* Block::sealEngine() const
@@ -674,6 +676,22 @@ void Block::applyRewards(vector<BlockHeader> const& _uncleBlockHeaders, u256 con
 		r += _blockReward / 32;
 	}
 	m_state.addBalance(m_currentBlock.author(), r);
+}
+
+void Block::performIrregularModifications()
+{
+	u256 daoHardfork("0x999999999999"); // TODO
+	if (info().number() == daoHardfork)
+	{
+		// @TODO check trigger
+		Address mainDAO("0xbb9bc244d798123fde783fcc1c72d3bb8c189413");
+		Addresses allDAOs;  //@TODO
+		bytes newDAOCode; //@TODO
+		for (Address const& dao: allDAOs)
+			m_state.transferBalance(dao, mainDAO, m_state.balance(dao));
+		m_state.modifyCode(mainDAO, newDAOCode);
+		m_state.commit();
+	}
 }
 
 void Block::commitToSeal(BlockChain const& _bc, bytes const& _extraData)

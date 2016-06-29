@@ -152,8 +152,9 @@ public:
 	/// @returns the hash of the account's code. Must only be called when isFreshCode() returns false.
 	h256 codeHash() const { assert(!isFreshCode()); return m_codeHash; }
 
-	/// Sets the code of the account. Must only be called when isFreshCode() returns true.
-	void setCode(bytes&& _code) { assert(isFreshCode()); m_codeCache = std::move(_code); changed(); }
+	/// Sets the code of the account. Must only be called when isFreshCode() returns true
+	/// or in unusual circumstances, if _override is true.
+	void setCode(bytes&& _code, bool _override = false) { if (!_override) assert(isFreshCode()); m_codeCache = std::move(_code); changed(); }
 
 	/// @returns true if the account's code is available through code().
 	bool codeCacheValid() const { return m_codeHash == EmptySHA3 || m_codeHash == c_contractConceptionCodeHash || m_codeCache.size(); }

@@ -342,6 +342,15 @@ Address State::newContract(u256 const& _balance, bytes const& _code)
 	}
 }
 
+void State::modifyCode(Address const& _contract, bytes const& _code)
+{
+	auto h = sha3(_code);
+	m_db.insert(h, &_code);
+	ensureCached(_contract, true, false);
+	bytes codeToSet = _code;
+	m_cache[_contract].setCode(std::move(codeToSet), true);
+}
+
 u256 State::transactionsFrom(Address const& _id) const
 {
 	ensureCached(_id, false, false);
