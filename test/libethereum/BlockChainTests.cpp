@@ -763,17 +763,17 @@ BOOST_AUTO_TEST_CASE(bcSimpleTransition)
 	dev::test::executeTests("bcSimpleTransitionTest", "/BlockchainTests/TestNetwork",dev::test::getFolder(__FILE__) + "/BlockchainTestsFiller/TestNetwork", dev::test::doBlockchainTests);
 }
 
+BOOST_AUTO_TEST_CASE(bcTheDaoTest)
+{
+	dev::test::TestBlockChain::s_sealEngineNetwork = eth::Network::Test;
+	dev::test::executeTests("bcTheDaoTest", "/BlockchainTests/TestNetwork",dev::test::getFolder(__FILE__) + "/BlockchainTestsFiller/TestNetwork", dev::test::doBlockchainTests);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 ///
 
 BOOST_AUTO_TEST_SUITE(BlockChainTestsHomestead)
-
-BOOST_AUTO_TEST_CASE(bcTheDaoTestHomestead)
-{
-	dev::test::TestBlockChain::s_sealEngineNetwork = eth::Network::HomesteadTest;
-	dev::test::executeTests("bcTheDaoTest", "/BlockchainTests/Homestead",dev::test::getFolder(__FILE__) + "/BlockchainTestsFiller/Homestead", dev::test::doBlockchainTests);
-}
 
 BOOST_AUTO_TEST_CASE(bcForkStressTestHomestead)
 {

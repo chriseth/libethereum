@@ -457,7 +457,9 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 #if !ETH_RELEASE
 	assert(m_previousBlock.hash() == _block.info.parentHash());
 	assert(m_currentBlock.parentHash() == _block.info.parentHash());
-	assert(rootHash() == m_previousBlock.stateRoot());
+	u256 daoHardfork = m_sealEngine->chainParams().u256Param("theDaoBlock");
+	if (m_currentBlock.number() != daoHardfork + 1)
+		assert(rootHash() == m_previousBlock.stateRoot());
 #endif
 
 	if (m_currentBlock.parentHash() != m_previousBlock.hash())
@@ -678,16 +680,16 @@ void Block::applyRewards(vector<BlockHeader> const& _uncleBlockHeaders, u256 con
 	}
 	m_state.addBalance(m_currentBlock.author(), r);
 }
-
+//#include <libethashseal/GenesisInfo.h>
 void Block::performIrregularModifications()
 {
-	u256 daoHardfork("0x02"); // TODO
-	if (info().number() == daoHardfork)
+	u256 daoHardfork = m_sealEngine->chainParams().u256Param("theDaoBlock");
+	if (info().number() == daoHardfork + 1) //resetCurrent make this call after importing the last block
 	{
 		// @TODO check trigger
 		Address mainDAO("0xbb9bc244d798123fde783fcc1c72d3bb8c189413");
 		Addresses allDAOs = childDaos();
-		bytes newDAOCode; //@TODO
+		bytes newDAOCode = fromHex("0x11223344"); //@TODO
 		for (Address const& dao: allDAOs)
 			m_state.transferBalance(dao, mainDAO, m_state.balance(dao));
 		m_state.modifyCode(mainDAO, newDAOCode);

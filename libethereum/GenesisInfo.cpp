@@ -454,6 +454,8 @@ dev::Addresses const dev::eth::childDaos()
 		{
 			Address address(account.get_obj()["address"].get_str());
 			accounts.push_back(address);
+			Address extraAddress(account.get_obj()["extraBalanceAccount"].get_str());
+			accounts.push_back(extraAddress);
 		}
 	}
 	return accounts;
